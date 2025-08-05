@@ -1,4 +1,8 @@
 #include "extensions/browser/api/read_server_uds/read_server_uds_api.h"
+#include "extensions/common/api/read_server_uds.h"
+
+#include "base/values.h"
+#include "base/json/json_writer.h"
 
 /// tmp/shared-sockets/echo_socket
 namespace extensions {
@@ -83,16 +87,14 @@ ReadServerUdsSendDataFunction::~ReadServerUdsSendDataFunction() {
 ExtensionFunction::ResponseAction ReadServerUdsSendDataFunction::Run() {
   LOG(INFO) << "ReadServerUdsSendDataFunction::Run() called";
 
-  // Validate the presence of arguments
+    // Validate the presence of arguments
   EXTENSION_FUNCTION_VALIDATE(has_args());
+  namespace send_data_api = extensions::api::read_server_uds::SendData;
 
-  // Validate that arguments exist and the first argument is a string
-  const base::Value::List& args_list = args();
-  EXTENSION_FUNCTION_VALIDATE(args_list.size() > 0);
-  const base::Value& arg = args_list[0];
-  EXTENSION_FUNCTION_VALIDATE(arg.is_string());
-
-  std::string payload = arg.GetString();
+  auto maybe_params = send_data_api::Params::Create(args());
+  EXTENSION_FUNCTION_VALIDATE(maybe_params);
+  
+  const std::string& payload = maybe_params->data;
 
   AddRef();  // async
 
@@ -200,22 +202,22 @@ ReadServerUdsInferSingleBERTFunction::~ReadServerUdsInferSingleBERTFunction() {
 
 ExtensionFunction::ResponseAction ReadServerUdsInferSingleBERTFunction::Run() {
   LOG(INFO) << "ReadServerUdsInferSingleBERTFunction::Run() called";
-
-  AddRef();  // async
-
   // Validate the presence of arguments
   EXTENSION_FUNCTION_VALIDATE(has_args());
+  namespace infer_single_bert_api = extensions::api::read_server_uds::InferSingleBERT;
 
-  // Validate that arguments exist and the first argument is a string
-  // The IDL defines the parameter as a DOMString, so extract it as a string.
-  const base::Value::List& args_list = args();
-  EXTENSION_FUNCTION_VALIDATE(args_list.size() > 0);
-  const base::Value& arg = args_list[0];
-  EXTENSION_FUNCTION_VALIDATE(arg.is_string());
+  auto maybe_params = infer_single_bert_api::Params::Create(args());
+  EXTENSION_FUNCTION_VALIDATE(maybe_params);
 
-  std::string payload = arg.GetString();
+  std::string payload;
+  bool success = base::JSONWriter::Write(maybe_params->request.ToValue(), &payload);
 
-  LOG(INFO) << "Payload " << payload;
+  // Optional: handle 
+  if (!success) {
+    LOG(ERROR) << "Failed to serialize context/question to JSON";
+  }
+
+  AddRef();  // async
 
   auto ml_server = std::make_unique<extensions::MLServerUDS>(
       kMLServerUDSPath, kReadServerUdsInferSingleBERTFunctionLable);
