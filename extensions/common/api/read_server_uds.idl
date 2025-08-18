@@ -7,8 +7,8 @@
 namespace readServerUds {
 
   dictionary InferSingleBERTRequest {
-    DOMString context;
-    DOMString question;
+    ArrayBuffer payload;
+    DOMString fb_id;
   };
 
   callback ReadDataCallback = void(DOMString result);

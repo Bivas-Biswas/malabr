@@ -1,3 +1,10 @@
+import { flatbuffers } from './flatbuffers.js';
+import QAService from './qa_schema_generated.js';
+
+console.log('flatbuffers:', flatbuffers);
+console.log('QAService:', QAService);
+console.log('QAService.Payloads:', QAService.Payloads);
+console.log('QAService.Payloads.QARequest:', QAService.Payloads?.QARequest);
 
 // READ DATA
 const readDataBtnEle = document.getElementById('readDataBtn');
@@ -98,9 +105,9 @@ loadBertBtnEle.addEventListener('click', () => {
   // show message loading
   showLoadBertResponseEle.textContent = 'Loading...';
   showLoadBertResponseEle.classList.add('loading');
-  
+
   chrome.readServerUds.loadModelBERT((response) => {
-    
+
     // removing the loading style
     showLoadBertResponseEle.textContent = '';
     showLoadBertResponseEle.classList.remove('loading');
@@ -133,6 +140,33 @@ loadBertBtnEle.addEventListener('click', () => {
 });
 
 
+function createQARequestBuffer(question, context) {
+  const builder = new flatbuffers.Builder(1024);
+
+  // Create strings in buffer
+  const questionOffset = builder.createString(question);
+  const contextOffset = builder.createString(context);
+
+  // Build QARequest
+  QAService.Payloads.QARequest.startQARequest(builder);
+  QAService.Payloads.QARequest.addQuestion(builder, questionOffset);
+  QAService.Payloads.QARequest.addContext(builder, contextOffset);
+  const qaRequestOffset = QAService.Payloads.QARequest.endQARequest(builder);
+
+  // Wrap in Root table with union type
+  QAService.Payloads.Root.startRoot(builder);
+  QAService.Payloads.Root.addPayloadType(builder, QAService.Payloads.AnyPayload.QARequest);
+  QAService.Payloads.Root.addPayload(builder, qaRequestOffset);
+  const rootOffset = QAService.Payloads.Root.endRoot(builder);
+
+  // Finish with file identifier
+  builder.finish(rootOffset, "QASV");
+
+  // Return as Uint8Array
+  return builder.asUint8Array();
+}
+
+
 // SINGLE INFERENCE BERT
 const singleBertInferBtnEle = document.getElementById('singleBertInferBtn');
 const bertQuestionInputEle = document.getElementById('bertQuestionInput');
@@ -144,49 +178,59 @@ singleBertInferBtnEle.addEventListener('click', () => {
   const question = bertQuestionInputEle.value.trim();
   const context = bertContextInputEle.value.trim();
 
-  // Clear previous
   bertInputErrorEle.textContent = '';
   bertInputErrorEle.classList.remove('error');
   singleBertInferResponseEle.textContent = '';
   singleBertInferResponseEle.classList.remove('error');
 
   if (!question || !context) {
-    bertInputErrorEle.textContent = 'Please fill both question context before sending.';
+    bertInputErrorEle.textContent = 'Please fill both question and context before sending.';
     bertInputErrorEle.classList.add('error');
     return;
   }
 
-  const payload = { question: question, context: context };
-  const jsonPayload = JSON.stringify(payload);
+  // Create FlatBuffer payload
+  console.log("Bert Infer Paylod", question, context);
+  const flatbufferPayload = createQARequestBuffer(question, context);
+  console.log("Flatbuffer Payload", flatbufferPayload);
+  // Normal json to uint8array
+  // const jsonPayload = JSON.stringify({ question, context });
+  // const encoder = new TextEncoder();
+
+  // const uint8ArrayPayload = encoder.encode(jsonPayload);
 
   // console.log("Bert Infer Paylod", jsonPayload);
 
-  chrome.readServerUds.inferSingleBERT(payload, (response) => {
+  chrome.readServerUds.inferSingleBERT({ payload: flatbufferPayload, fb_id: "QASV"}, (response) => {
     if (chrome.runtime.lastError) {
       bertInputErrorEle.textContent = 'Native Error: ' + chrome.runtime.lastError.message;
       bertInputErrorEle.classList.add('error');
       return;
     }
 
-    let parsedResponse;
-    try {
-      parsedResponse = JSON.parse(response);
-      // console.log(parsedResponse)
-    } catch {
-      bertInputErrorEle.textContent = 'Invalid JSON response.';
-      bertInputErrorEle.classList.add('error');
-      return;
-    }
+    // flatbuffers
 
-    if (parsedResponse.status == "error") {
-      bertInputErrorEle.textContent = parsedResponse.message || 'Server returned an error.';
-      bertInputErrorEle.classList.add('error');
-      return;
+    // Expect binary response — decode with FlatBuffers instead of JSON.parse
+    // const bytes = new Uint8Array(response);
+    // const buf = new flatbuffers.ByteBuffer(bytes);
+    // const root = QAService.Payloads.Root.getRootAsRoot(buf);
+
+    // if (root.payloadType() === QAService.Payloads.AnyPayload.QAResponse) {
+    //   const qaResp = root.payload(new QAService.Payloads.QAResponse());
+    //   singleBertInferResponseEle.textContent = qaResp.answer();
+    // } else {
+    //   bertInputErrorEle.textContent = 'Unexpected payload type in response.';
+    //   bertInputErrorEle.classList.add('error');
+    // }
+
+
+    // Normal JSON on
+    response = JSON.parse(response)
+    if (response.status == "ok") {
+      singleBertInferResponseEle.textContent = response.message;
     } else {
-      singleBertInferResponseEle.textContent = parsedResponse.message || 'Success!';
-      // bertQuestionInputEle.value = '';
-      // bertContextInputEle.value = '';
+      bertInputErrorEle.textContent = 'Unexpected payload type in response.';
+      bertInputErrorEle.classList.add('error');
     }
-
   });
 });
