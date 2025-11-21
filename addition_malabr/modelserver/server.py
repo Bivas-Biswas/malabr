@@ -1,7 +1,4 @@
 from flask import Flask, request, jsonify
-import time
-import tensorflow as tf
-import torch
 from transformers import pipeline
 
 app = Flask(__name__)
@@ -64,48 +61,49 @@ def infer_batch_bert():
             except Exception as e:
                 results.append({"error": f"Inference error at index {idx}: {str(e)}"})
     return jsonify(results)
-@app.route('/train_model', methods=['POST'])
-def train_model():
-    try:
-        # Load MNIST data.
-        (x_train, y_train), _ = tf.keras.datasets.mnist.load_data()
-        x_train = x_train.astype('float32') / 255.0  # normalize
 
-        # Convert labels to one-hot encoding.
-        y_train_onehot = tf.keras.utils.to_categorical(y_train, 10)
+# @app.route('/train_model', methods=['POST'])
+# def train_model():
+#     try:
+#         # Load MNIST data.
+#         (x_train, y_train), _ = tf.keras.datasets.mnist.load_data()
+#         x_train = x_train.astype('float32') / 255.0  # normalize
 
-        # Mimic tfjs setup by taking a subset.
-        TRAIN_DATA_SIZE = 5500
-        x_train = x_train[:TRAIN_DATA_SIZE]
-        y_train_onehot = y_train_onehot[:TRAIN_DATA_SIZE]
+#         # Convert labels to one-hot encoding.
+#         y_train_onehot = tf.keras.utils.to_categorical(y_train, 10)
 
-        # Define a simple model: Flatten -> Dense(128, relu) -> Dense(10, softmax)
-        model = tf.keras.Sequential([
-            tf.keras.layers.Flatten(input_shape=(28, 28)),
-            tf.keras.layers.Dense(128, activation='relu'),
-            tf.keras.layers.Dense(10, activation='softmax')
-        ])
-        model.compile(
-            optimizer='adam',
-            loss='categorical_crossentropy',  # Corrected loss string
-            metrics=['accuracy']
-        )
+#         # Mimic tfjs setup by taking a subset.
+#         TRAIN_DATA_SIZE = 5500
+#         x_train = x_train[:TRAIN_DATA_SIZE]
+#         y_train_onehot = y_train_onehot[:TRAIN_DATA_SIZE]
 
-        # Start timing the training.
-        start_time = time.perf_counter()
-        history = model.fit(x_train, y_train_onehot, epochs=10, batch_size=512, verbose=0)
-        end_time = time.perf_counter()
+#         # Define a simple model: Flatten -> Dense(128, relu) -> Dense(10, softmax)
+#         model = tf.keras.Sequential([
+#             tf.keras.layers.Flatten(input_shape=(28, 28)),
+#             tf.keras.layers.Dense(128, activation='relu'),
+#             tf.keras.layers.Dense(10, activation='softmax')
+#         ])
+#         model.compile(
+#             optimizer='adam',
+#             loss='categorical_crossentropy',  # Corrected loss string
+#             metrics=['accuracy']
+#         )
 
-        training_time_ms = (end_time - start_time) * 1000  # milliseconds
-        accuracy = history.history['accuracy'][-1]
+#         # Start timing the training.
+#         start_time = time.perf_counter()
+#         history = model.fit(x_train, y_train_onehot, epochs=10, batch_size=512, verbose=0)
+#         end_time = time.perf_counter()
 
-        result = {
-            "training_time_ms": training_time_ms,
-            "accuracy": accuracy
-        }
-        return jsonify(result)
-    except Exception as e:
-        return jsonify({"error": f"Training error: {str(e)}"}), 500
+#         training_time_ms = (end_time - start_time) * 1000  # milliseconds
+#         accuracy = history.history['accuracy'][-1]
+
+#         result = {
+#             "training_time_ms": training_time_ms,
+#             "accuracy": accuracy
+#         }
+#         return jsonify(result)
+#     except Exception as e:
+#         return jsonify({"error": f"Training error: {str(e)}"}), 500
 
 @app.route("/test", methods=["GET"])
 def analyze():

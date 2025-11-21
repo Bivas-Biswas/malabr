@@ -1,0 +1,8 @@
+
+    Benchmark (N=1, concurrency=1):
+    Avg: 13000.36 ms
+    Median: 13000.36 ms
+    P90: 13000.36 ms
+    P99: 13000.36 ms
+    Throughput: 0.08 req/sec
+    

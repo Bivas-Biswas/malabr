@@ -1,5 +1,3 @@
 flask
 transformers
 torch
-tensorflow-cpu==2.16.1
-tf-keras==2.16.0
