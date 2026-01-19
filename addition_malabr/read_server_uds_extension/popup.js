@@ -176,8 +176,8 @@ const bertInputErrorEle = document.getElementById('bertInputError');
 const singleBertInferResponseEle = document.getElementById('singleBertInferResponse');
 
 singleBertInferBtnEle.addEventListener('click', () => {
-  // const question = bertQuestionInputEle.value.trim();
-  // const context = bertContextInputEle.value.trim();
+  const question = bertQuestionInputEle.value.trim();
+  const context = bertContextInputEle.value.trim();
 
   bertInputErrorEle.textContent = '';
   bertInputErrorEle.classList.remove('error');

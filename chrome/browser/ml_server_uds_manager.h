@@ -20,7 +20,7 @@ class MLServerUdsManager {
   MLServerUdsManager();
   ~MLServerUdsManager();
 
-  std::unique_ptr<base::Process> ml_server_uds_process_;
+  base::Process ml_server_uds_process_;
 
   // Prevent copying
   MLServerUdsManager(const MLServerUdsManager&) = delete;
