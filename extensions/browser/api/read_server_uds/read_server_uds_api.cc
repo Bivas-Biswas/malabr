@@ -11,7 +11,7 @@
 /// tmp/shared-sockets/echo_socket
 namespace extensions {
 
-constexpr char kMLServerUDSPath[] = "/tmp/shared-sockets/echo_socket";
+constexpr char kMLServerUDSPath[] = "/tmp/malabr.sck";
 
 // ALL lable for ML server function handler
 constexpr char kReadServerUdsReadDataFunctionLable[] = "LABEL_READ_DATA";

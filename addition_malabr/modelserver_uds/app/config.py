@@ -1,4 +1,4 @@
 
-SOCKET_PATH = "/tmp/shared-sockets/echo_socket"
+SOCKET_PATH = "/tmp/malabr.sck"
 DEBUG = True
 LOG_FILE = None
