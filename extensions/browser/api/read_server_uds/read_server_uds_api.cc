@@ -7,6 +7,8 @@
 #include "base/values.h"
 #include "extensions/browser/api/read_server_uds/ml_server_uds_v2.h"
 #include "extensions/common/api/read_server_uds.h"
+#include "extensions/common/extension_id.h"
+#include "extensions/common/utils/extension_utils.h"
 
 /// tmp/shared-sockets/echo_socket
 namespace extensions {
@@ -249,18 +251,19 @@ ExtensionFunction::ResponseAction ReadServerUdsInferSingleBERTFunction::Run() {
   // Validate the presence of arguments
   EXTENSION_FUNCTION_VALIDATE(has_args());
   namespace infer_single_bert_api =
-  extensions::api::read_server_uds::InferSingleBERT;
-  
+      extensions::api::read_server_uds::InferSingleBERT;
+
   auto maybe_params = infer_single_bert_api::Params::Create(args());
-  
+
   auto payload = maybe_params->request.payload;
   std::string fb_file_identifier = maybe_params->request.fb_id;
-  
+
   AddRef();
   base::ThreadPool::PostTask(
       FROM_HERE, {base::MayBlock()},
       base::BindOnce(&ReadServerUdsInferSingleBERTFunction::DispatchRequest,
-                     base::Unretained(this), std::move(payload), std::move(fb_file_identifier)));
+                     base::Unretained(this), std::move(payload),
+                     std::move(fb_file_identifier)));
 
   return RespondLater();
 }

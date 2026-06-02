@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "Malabr Test Extension",
+  "version": "1.0",
+  "description": "Test all available malabr APIs",
+  "permissions": [
+    "malabr",
+    "scripting"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "malabr_js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
+}

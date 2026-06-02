@@ -68,6 +68,7 @@ group("api_implementations") {
     "//extensions/browser/api/display_file",
     "//extensions/browser/api/read_server",
     "//extensions/browser/api/read_server_uds",
+    "//extensions/browser/api/malabr",
   ]
 
   if (is_chromeos) {

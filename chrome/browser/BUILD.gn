@@ -142,6 +142,19 @@ source_set("ml_server_uds_feature") {
   ]
 }
 
+# Malabr Flag Files
+
+source_set("malabr_feature") {
+  sources = [
+    "malabr_manager.cc",
+    "malabr_manager.h",
+  ]
+
+  deps = [
+    "//base",
+  ]
+}
+
 source_set("display_file_feature") {
   sources = [
     "display_file_feature.cc",
@@ -166,6 +179,7 @@ source_set("browser_process") {
     ":display_file_feature",
     ":ml_server_feature", 
     ":ml_server_uds_feature", 
+    ":malabr_feature", 
     "//media:media_buildflags",
     "//components/policy/proto",
     "//third_party/leveldatabase",

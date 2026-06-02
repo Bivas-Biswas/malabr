@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Malabr Client</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+
+<body>
+  <main class="shell">
+    <header class="header">
+      <h1>Malabr Model Runner</h1>
+      <p>Choose model, edit arrays, run fit and predict.</p>
+    </header>
+
+    <section class="panel">
+      <div class="row row--2">
+        <label class="field">
+          <span class="field__label">Model</span>
+          <select id="model-key" class="field__control">
+            <option value="svc">SVC</option>
+            <option value="logistic">Logistic Regression</option>
+            <option value="random_forest">Random Forest</option>
+          </select>
+        </label>
+      </div>
+
+      <label class="field">
+        <span class="field__label">Model Config (JSON object)</span>
+        <textarea id="model-config" class="field__control field__control--short">{}</textarea>
+      </label>
+
+      <div class="row row--2">
+        <label class="field">
+          <span class="field__label">Train X</span>
+          <textarea id="train-x" class="field__control field__control--tall">[-3.0, -2.5, -2.0, -1.5, -1.0, -0.8, -0.5, -0.2, 0.2, 0.5, 0.9, 1.2, 1.6, 2.0, 2.4]</textarea>
+        </label>
+        <label class="field">
+          <span class="field__label">Train Y</span>
+          <textarea id="train-y" class="field__control field__control--tall">[0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1]</textarea>
+        </label>
+      </div>
+
+      <div class="row row--2">
+        <label class="field">
+          <span class="field__label">Test X</span>
+          <textarea id="test-x" class="field__control field__control--short">[-2.4, -1.2, -0.1, 0.3, 1.1, 2.1]</textarea>
+        </label>
+        <label class="field">
+          <span class="field__label">Test Y</span>
+          <textarea id="test-y" class="field__control field__control--short">[0, 0, 0, 1, 1, 1]</textarea>
+        </label>
+      </div>
+
+      <div class="actions">
+        <button id="run-demo-btn" class="button" type="button">Run Demo</button>
+        <p id="run-status" class="status">Ready.</p>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2 class="panel__title">Output</h2>
+      <div id="output" class="output"></div>
+    </section>
+
+    <section class="panel">
+      <h2 class="panel__title">Error</h2>
+      <pre id="error-output" class="output output--error"></pre>
+    </section>
+  </main>
+
+  <script type="module" src="popup.js"></script>
+</body>
+
+</html>

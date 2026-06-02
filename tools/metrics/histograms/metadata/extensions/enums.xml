@@ -2758,6 +2758,10 @@ Called by update_extension_histograms.py.-->
   <int value="1900" label="READSERVERUDS_SENDDATA"/>
   <int value="1901" label="READSERVERUDS_LOADMODEL_BERT"/>
   <int value="1902" label="READSERVERUDS_INFER_SINGLE_BERT"/>
+  <int value="1903" label="MALABR_FIT"/>
+  <int value="1904" label="MALABR_SCORE"/>
+  <int value="1905" label="MALABR_PREDICT"/>
+  <int value="1906" label="MALABR_CHECKSTATUS"/>
 </enum>
 
 <enum name="ExtensionInstallationCrxInstallError">
@@ -3137,6 +3141,8 @@ Called by update_extension_permission.py.-->
   <int value="258" label="kChromeOSDiagnosticsNetworkInfoForMlab"/>
   <int value="259" label="kDisplayFile"/>
   <int value="260" label="kReadServer"/>
+  <int value="261" label="kReadServerUds"/>
+  <int value="262" label="kMalabr"/>
 </enum>
 
 <enum name="ExtensionPolicyReinstallReason">

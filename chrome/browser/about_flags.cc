@@ -3976,6 +3976,14 @@ const FeatureEntry kFeatureEntries[] = {
     kOsLinux,  // Supports Linux
     FEATURE_VALUE_TYPE(features::kMLServerUdsFeature),
     },
+    // malabr
+    {
+    "enable-malabr",
+    flag_descriptions::kMalabrFeatureName,
+    flag_descriptions::kMalabrFeatureDescription,
+    kOsLinux,  // Supports Linux
+    FEATURE_VALUE_TYPE(features::kMalabrFeature),
+    },
     {"ignore-gpu-blocklist", flag_descriptions::kIgnoreGpuBlocklistName,
      flag_descriptions::kIgnoreGpuBlocklistDescription, kOsAll,
      SINGLE_VALUE_TYPE(switches::kIgnoreGpuBlocklist)},

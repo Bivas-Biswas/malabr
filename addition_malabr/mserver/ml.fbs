@@ -1,0 +1,67 @@
+namespace ML;
+
+enum DType : byte {
+  FLOAT32 = 0,
+  FLOAT64 = 1,
+  INT32   = 2,
+  INT64   = 3,
+  BOOL    = 4,
+  STRING  = 5
+}
+
+table Tensor {
+  name: string;
+  dtype: DType;
+  shape: [int];
+  data: [ubyte];
+}
+
+table IntVal    { value:int; }
+table FloatVal  { value:float; }
+table DoubleVal { value:double; }
+table BoolVal   { value:bool; }
+table StringVal { value:string; }
+
+union ParamValue {
+  IntVal,
+  FloatVal,
+  DoubleVal,
+  BoolVal,
+  StringVal
+}
+
+table Param {
+  key: string;
+  value: ParamValue;
+}
+
+enum Action : byte {
+  FIT = 0,
+  PREDICT = 1,
+  SCORE = 2,
+  CHECK_STATUS = 3
+}
+
+table Request {
+  action: Action;
+
+  // model info
+  type: string;
+  id: string;
+  name: string;
+
+  // parameters (only for FIT)
+  params: [Param];
+
+  // tensors
+  x: Tensor;
+  y: Tensor;
+}
+
+table Response {
+  status: int;
+  message: string;
+  tensors: [Tensor];
+}
+
+root_type Request;

@@ -30,6 +30,11 @@ const char kMLServerUdsFeatureName[] = "ML Server UDS";
 const char kMLServerUdsFeatureDescription[] = 
     "Enables experimental machine learning server UDS. Requires browser restart.";
 
+// Malabr
+const char kMalabrFeatureName[] = "Malabr: Machine Learning in Browser";
+const char kMalabrFeatureDescription[] = 
+    "Enables experimental Malabr features. Requires browser restart.";
+
 const char kAccelerated2dCanvasName[] = "Accelerated 2D canvas";
 const char kAccelerated2dCanvasDescription[] =
     "Enables the use of the GPU to perform 2d canvas rendering instead of "

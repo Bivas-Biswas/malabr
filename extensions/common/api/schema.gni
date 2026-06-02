@@ -8,6 +8,7 @@ extensions_api_schema_files_ = [
   "display_file.idl",
   "read_server.idl",
   "read_server_uds.idl",
+  "malabr.idl",
   "alarms.idl",
   "app_current_window_internal.idl",
   "app_runtime.idl",

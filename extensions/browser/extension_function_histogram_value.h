@@ -1966,9 +1966,15 @@ enum HistogramValue {
   READSERVERUDS_SENDDATA = 1900,
   READSERVERUDS_LOADMODEL_BERT = 1901,
   READSERVERUDS_INFER_SINGLE_BERT = 1902,
-  // Last entry: Add new entries above, then run:
-  // tools/metrics/histograms/update_extension_histograms.py
-  ENUM_BOUNDARY
+
+  // MALABR
+  MALABR_FIT = 1903,
+  MALABR_SCORE = 1904,
+  MALABR_PREDICT = 1905,
+  MALABR_CHECKSTATUS = 1906,
+      // Last entry: Add new entries above, then run:
+      // tools/metrics/histograms/update_extension_histograms.py
+      ENUM_BOUNDARY
 };
 
 }  // namespace extensions::functions

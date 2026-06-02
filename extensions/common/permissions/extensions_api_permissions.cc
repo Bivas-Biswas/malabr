@@ -34,6 +34,7 @@ constexpr APIPermissionInfo::InitInfo permissions_to_register[] = {
     {APIPermissionID::kDisplayFile, "displayFile", APIPermissionInfo::kFlagNone},
     {APIPermissionID::kReadServer, "readServer", APIPermissionInfo::kFlagNone},
     {APIPermissionID::kReadServerUds, "readServerUds", APIPermissionInfo::kFlagNone},
+    {APIPermissionID::kMalabr, "malabr", APIPermissionInfo::kFlagNone},
     {APIPermissionID::kAlarms, "alarms",
      APIPermissionInfo::kFlagDoesNotRequireManagedSessionFullLoginWarning},
     {APIPermissionID::kAlphaEnabled, "app.window.alpha",

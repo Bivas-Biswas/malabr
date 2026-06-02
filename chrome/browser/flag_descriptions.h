@@ -63,6 +63,10 @@ extern const char kMLServerUdsFeatureName[];
 // Flag description
 extern const char kMLServerUdsFeatureDescription[];
 
+// Malabr
+extern const char kMalabrFeatureName[];
+extern const char kMalabrFeatureDescription[];
+
 extern const char kAccelerated2dCanvasName[];
 extern const char kAccelerated2dCanvasDescription[];
 

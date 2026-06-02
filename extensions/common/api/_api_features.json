@@ -517,6 +517,11 @@
     "extension_types": ["extension"],
     "dependencies": ["permission:readServerUds"]
   },
+  "malabr": {
+    "contexts": ["privileged_extension"],
+    "extension_types": ["extension"],
+    "dependencies": ["permission:malabr"]
+  },
   "runtime": {
     "channel": "stable",
     "extension_types": [

@@ -1,0 +1,36 @@
+// Copyright 2024 The Chromium Authors
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+// This IDL defines the `malabr` API for interacting with malabr_server.
+
+namespace malabr {
+
+  dictionary FitRequest {
+    ArrayBuffer payload;
+  };
+
+  dictionary ScoreRequest {
+    ArrayBuffer payload;
+  };
+  
+  dictionary PredictRequest {
+    ArrayBuffer payload;
+  };
+
+  dictionary CheckStatusRequest {
+    ArrayBuffer payload;
+  };
+
+  callback FitCallback = void(DOMString response);
+  callback ScoreCallback = void(DOMString response);
+  callback PredictCallback = void(DOMString response);
+  callback CheckStatusCallback = void(DOMString response);
+
+  interface Functions {
+    static void fit(FitRequest request, optional FitCallback callback);
+    static void score(ScoreRequest request, optional ScoreCallback callback);
+    static void predict(PredictRequest request, optional PredictCallback callback);
+    static void checkStatus(CheckStatusRequest request, optional CheckStatusCallback callback);
+  };
+};

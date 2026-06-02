@@ -13,6 +13,9 @@
 // For ML UDS Server Feature
 #include "chrome/browser/ml_server_uds_manager.h"
 
+// For Malabr Feature
+#include "chrome/browser/malabr_manager.h"
+
 // Added for Command Line and related utilities
 #include "base/process/process.h"
 #include <stddef.h>
@@ -1256,6 +1259,7 @@ int ChromeBrowserMainParts::PreMainMessageLoopRun() {
   // ML Server Start call
   MLServerManager::GetInstance().StartMLServerIfEnabled();
   MLServerUdsManager::GetInstance().StartMLServerIfEnabled();
+  MalabrManager::GetInstance().StartMLServerIfEnabled();
   TRACE_EVENT0("startup", "ChromeBrowserMainParts::PreMainMessageLoopRun");
 
   result_code_ = PreMainMessageLoopRunImpl();
@@ -1928,6 +1932,7 @@ void ChromeBrowserMainParts::PostMainMessageLoopRun() {
   // ML Server Stop
   MLServerManager::GetInstance().StopMLServer();
   MLServerUdsManager::GetInstance().StopMLServer();
+  MalabrManager::GetInstance().StopMLServer();
   TRACE_EVENT_NESTABLE_ASYNC_END0(
       "toplevel", "ChromeBrowserMainParts::MainMessageLoopRun", this);
   TRACE_EVENT0("startup", "ChromeBrowserMainParts::PostMainMessageLoopRun");
